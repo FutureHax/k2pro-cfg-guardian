@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+# Boot before klipper (START=55) so missing files are back first.
+
+START=54
+STOP=10
+USE_PROCD=1
+DEPEND=fstab
+
+PROG=/usr/bin/cfg-guardian.sh
+
+start_service() {
+    $PROG once
+
+    procd_open_instance
+    procd_set_param command $PROG daemon
+    procd_set_param respawn 3600 10 0
+    procd_set_param stderr 1
+    procd_close_instance
+}

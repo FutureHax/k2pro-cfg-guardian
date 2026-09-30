@@ -1,0 +1,38 @@
+{
+  "changes": [
+    {
+      "file": "gcode_macro.cfg",
+      "section": "[gcode_macro QUIT_MATERIAL_RETRUDE_MATERIAL]",
+      "description": "DXC2: retract farther after the cut so the filament clears the gears",
+      "from": "G0 E-10 F360",
+      "to": "G0 E-40 F360",
+      "enabled": true
+    },
+    {
+      "file": "box.cfg",
+      "section": "[box]",
+      "description": "DXC2: pull more filament back past the extruder gears after a cut",
+      "setting": "Tn_retrude",
+      "from": "-10",
+      "to": "-20",
+      "enabled": true
+    },
+    {
+      "file": "gcode_macro.cfg",
+      "section": "[gcode_macro QUIT_MATERIAL_RETRUDE_MATERIAL]",
+      "description": "DXC2: wait 300 ms after the retract before the CFS reels the filament in",
+      "insert_after": "G0 E-40 F360",
+      "line": "G4 P300",
+      "enabled": false
+    },
+    {
+      "file": "motor_control.cfg",
+      "section": "[motor_control]",
+      "description": "DXC2: optional deeper cut. Community copies of the FR2865 fix set this to 0.0, which cuts just a hair deeper.",
+      "setting": "cut_pos_offset",
+      "from": "0.4",
+      "to": "0.0",
+      "enabled": false
+    }
+  ]
+}
