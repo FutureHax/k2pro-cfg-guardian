@@ -19,14 +19,22 @@ URL = "https://github.com/%s/archive/refs/heads/%s.tar.gz" % (REPO, BRANCH)
 
 
 def install_local(script):
-    subprocess.check_call(["sh", script])
+    try:
+        subprocess.check_call(["sh", script])
+    except subprocess.CalledProcessError as err:
+        sys.exit("sh %s failed (exit %s)" % (script, err.returncode))
 
 
 def install_from_github():
     work = tempfile.mkdtemp(prefix="cfg-guardian-", dir="/tmp")
     try:
-        print("downloading", URL)
-        data = urllib.request.urlopen(URL, timeout=90).read()
+        print("downloading", URL, flush=True)
+        try:
+            data = urllib.request.urlopen(URL, timeout=90).read()
+        except urllib.error.HTTPError as err:
+            sys.exit("HTTP %s fetching %s" % (err.code, URL))
+        except urllib.error.URLError as err:
+            sys.exit("Could not fetch %s: %s" % (URL, err.reason))
         with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as tar:
             tar.extractall(work)
         top = next(

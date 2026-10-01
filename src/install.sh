@@ -57,7 +57,9 @@ fi
 sync
 
 /etc/init.d/cfg-guardian enable
-/etc/init.d/cfg-guardian restart
+# shellcheck disable=SC1091
+. "$here/service-ctl.sh"
+cfg_guardian_service_ctl /etc/init.d/cfg-guardian
 sleep 1
 echo "installed: $(ls /etc/rc.d/ | grep cfg-guardian | tr '\n' ' ')"
 /usr/bin/cfg-guardian.sh status
